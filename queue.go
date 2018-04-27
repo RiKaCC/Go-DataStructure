@@ -1,15 +1,11 @@
 package main
 
-import (
-	"fmt"
-)
-
 type Queue struct {
 	data []interface{}
 	size int
 }
 
-func New() *Queue {
+func NewQueue() *Queue {
 	return &Queue{
 		data: make([]interface{}, 0),
 		size: 0,
@@ -28,13 +24,10 @@ func (q *Queue) Pop() interface{} {
 	return r
 }
 
-func main() {
-	q := New()
-	for i := 0; i < 10; i++ {
-		q.Push(i)
+func (q *Queue) Empty() bool {
+	if q.size == 0 {
+		return true
 	}
 
-	fmt.Println(q.data)
-	fmt.Println(q.Pop())
-	fmt.Println(q.data)
+	return false
 }

@@ -1,15 +1,11 @@
 package main
 
-import (
-	"fmt"
-)
-
 type Stack struct {
 	data []interface{}
 	size int
 }
 
-func New() *Stack {
+func NewStack() *Stack {
 	s := &Stack{
 		data: make([]interface{}, 0, 0),
 		size: 0,
@@ -28,15 +24,4 @@ func (s *Stack) Pop() interface{} {
 	s.data = s.data[:s.size]
 
 	return r
-}
-
-func main() {
-	s := New()
-	for i := 0; i < 10; i++ {
-		s.Push(i)
-	}
-
-	fmt.Println(s.data)
-	s.Pop()
-	fmt.Println(s.data)
 }
