@@ -31,3 +31,9 @@ func (q *Queue) Empty() bool {
 
 	return false
 }
+
+func (q *Queue) SetEmpty() {
+	tempArr := make([]interface{}, 0)
+	q.data = tempArr
+	q.size = 0
+}
