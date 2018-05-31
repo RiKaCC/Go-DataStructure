@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	//"github.com/davecgh/go-spew/spew"
+	"math"
 	"sync"
 )
 
@@ -51,9 +52,15 @@ func (g *Graph) AddEdge(nodeID1 string, nodeID2 string, w int) {
 
 	if nodeID1 == nodeID2 {
 		panic("can't add same vertex in one edge")
+		return
 	}
 
-	// 记录每一个顶点
+	if w == 0 {
+		panic("weight can't use 0")
+		return
+	}
+
+	// record each vertex
 	g.nodeMap[nodeID1] = NewNode(nodeID1)
 	g.nodeMap[nodeID2] = NewNode(nodeID2)
 
@@ -77,4 +84,16 @@ func main() {
 	g.AddEdge("E", "F", 4)
 
 	fmt.Println(g)
+
+	// infinity
+	infinity := Inf(1)
+
+	// at first we need init a map to record the distance of every two vertex
+	var distance map[string]int
+	var isknow map[string]bool
+
+	for nodeID := range g.nodeMap {
+		distance[nodeID] = infinity
+		isknow[NodeID] = false
+	}
 }
