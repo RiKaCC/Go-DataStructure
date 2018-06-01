@@ -14,12 +14,12 @@ type node struct {
 type Edge struct {
 	src    Node
 	dst    Node
-	weight int
+	weight float64
 }
 
 type Graph struct {
 	sync.RWMutex
-	edge    map[string]map[string]int
+	edge    map[string]map[string]float64
 	nodeMap map[string]Node // record all the node in a graph
 }
 
@@ -35,18 +35,18 @@ func (n *node) NodeID() string {
 	return n.id
 }
 
-func NewEdge(src Node, dst Node, w int) *Edge {
+func NewEdge(src Node, dst Node, w float64) *Edge {
 	return &Edge{src: src, dst: dst, weight: w}
 }
 
 func NewGraph() *Graph {
 	return &Graph{
-		edge:    make(map[string]map[string]int),
+		edge:    make(map[string]map[string]float64),
 		nodeMap: make(map[string]Node),
 	}
 }
 
-func (g *Graph) AddEdge(nodeID1 string, nodeID2 string, w int) {
+func (g *Graph) AddEdge(nodeID1 string, nodeID2 string, w float64) {
 	g.Lock()
 	defer g.Unlock()
 
@@ -67,7 +67,7 @@ func (g *Graph) AddEdge(nodeID1 string, nodeID2 string, w int) {
 	if _, ok := g.edge[nodeID1]; ok {
 		g.edge[nodeID1][nodeID2] = w
 	} else {
-		tempMap := make(map[string]int)
+		tempMap := make(map[string]float64)
 		tempMap[nodeID2] = w
 		g.edge[nodeID1] = tempMap
 	}
@@ -80,20 +80,50 @@ func main() {
 	g.AddEdge("B", "E", 6)
 	g.AddEdge("B", "D", 2)
 	g.AddEdge("D", "E", 3)
-	g.AddEdge("C", "F", 10)
-	g.AddEdge("E", "F", 4)
+	g.AddEdge("C", "F", 1)
+	g.AddEdge("E", "F", 3)
 
 	fmt.Println(g)
+	shortDis := g.Dijkstra("A", "E")
+	fmt.Println("A->F shortest distance is:", shortDis)
+}
 
+func (g *Graph) Dijkstra(src string, dst string) (shortDis float64) {
 	// infinity
-	infinity := Inf(1)
+	infinity := math.Inf(1)
 
 	// at first we need init a map to record the distance of every two vertex
-	var distance map[string]int
-	var isknow map[string]bool
+	distance := make(map[string]float64)
 
 	for nodeID := range g.nodeMap {
-		distance[nodeID] = infinity
-		isknow[NodeID] = false
+		if nodeID == src {
+			distance[nodeID] = 0
+		} else {
+			distance[nodeID] = infinity
+		}
 	}
+
+	q := NewQueue()
+	q.Push(src)
+
+	for !q.Empty() {
+		v := q.Pop()
+		e, ok := v.(string)
+		if !ok {
+			return 0
+		}
+
+		for nodeID := range g.nodeMap {
+			if nodeID == e {
+				continue
+			}
+
+			if g.edge[e][nodeID]+distance[e] < distance[nodeID] && g.edge[e][nodeID] > 0 {
+				distance[nodeID] = g.edge[e][nodeID] + distance[e]
+				q.Push(nodeID)
+			}
+		}
+	}
+	fmt.Println(distance)
+	return distance[dst]
 }
