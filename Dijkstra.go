@@ -77,7 +77,7 @@ func main() {
 	g := NewGraph()
 	g.AddEdge("A", "B", 3)
 	g.AddEdge("A", "C", 2)
-	g.AddEdge("B", "E", 6)
+	g.AddEdge("B", "E", 1)
 	g.AddEdge("B", "D", 2)
 	g.AddEdge("D", "E", 3)
 	g.AddEdge("C", "F", 1)
@@ -85,16 +85,15 @@ func main() {
 
 	fmt.Println(g)
 	shortDis := g.Dijkstra("A", "E")
-	fmt.Println("A->F shortest distance is:", shortDis)
+	fmt.Println("A->E shortest distance is:", shortDis)
 }
 
 func (g *Graph) Dijkstra(src string, dst string) (shortDis float64) {
 	// infinity
 	infinity := math.Inf(1)
 
-	// at first we need init a map to record the distance of every two vertex
+	// init a short distance map to record the shortest distance from src
 	distance := make(map[string]float64)
-
 	for nodeID := range g.nodeMap {
 		if nodeID == src {
 			distance[nodeID] = 0
