@@ -77,9 +77,9 @@ func main() {
 	g := NewGraph()
 	g.AddEdge("A", "B", 3)
 	g.AddEdge("A", "C", 2)
-	g.AddEdge("B", "E", 1)
+	g.AddEdge("B", "E", 5)
 	g.AddEdge("B", "D", 2)
-	g.AddEdge("D", "E", 3)
+	g.AddEdge("D", "E", -2)
 	g.AddEdge("C", "F", 1)
 	g.AddEdge("E", "F", 3)
 
@@ -117,12 +117,19 @@ func (g *Graph) Dijkstra(src string, dst string) (shortDis float64) {
 				continue
 			}
 
-			if g.edge[e][nodeID]+distance[e] < distance[nodeID] && g.edge[e][nodeID] > 0 {
+			if g.edge[e][nodeID]+distance[e] < distance[nodeID] && g.edge[e][nodeID] != 0 {
+				if nodeID == "E" {
+					fmt.Println(e, nodeID, g.edge[e][nodeID])
+				}
 				distance[nodeID] = g.edge[e][nodeID] + distance[e]
 				q.Push(nodeID)
 			}
 		}
 	}
-	fmt.Println(distance)
+
+	for node := range g.nodeMap {
+		temp := fmt.Sprintf("from A -> %s =  %d", node, int(distance[node]))
+		fmt.Println(temp)
+	}
 	return distance[dst]
 }
