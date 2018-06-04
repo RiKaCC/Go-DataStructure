@@ -2,7 +2,7 @@
 - [queue](#queue)
 - [stack](#stack)
 - [graph](#graph)
-- [BFS](#BFS)
+    - [BFS](#bfs)
     - [Dijkstra](#Dijkstra)
 
 On the way of learning Golang.
@@ -71,7 +71,7 @@ if s.Empty() {
 
 ## graph
 
-## BFS
+## bfs
 BFS(广度优先搜索)，是一种很常见的搜索。适用于无权最短路径的问题。
 
 BFS的本质其实还是贪心算法。实现的过程中，需要借助queue。
