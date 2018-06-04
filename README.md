@@ -2,7 +2,7 @@
 - [queue](#queue)
 - [stack](#stack)
 - [graph](#graph)
-    - [BFS](#BFS)
+- [BFS](#BFS)
     - [Dijkstra](#Dijkstra)
 
 On the way of learning Golang.
