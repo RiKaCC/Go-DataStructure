@@ -2,8 +2,8 @@
 - [queue](#queue)
 - [stack](#stack)
 - [graph](#graph)
-    - [BFS](#bfs)
-    - [Dijkstra](#Dijkstra)
+    - [bfs](#bfs)
+    - [dijkstra](#dijkstra)
 
 On the way of learning Golang.
 
@@ -71,7 +71,7 @@ if s.Empty() {
 
 ## graph
 
-## bfs
+### bfs
 BFS(广度优先搜索)，是一种很常见的搜索。适用于无权最短路径的问题。
 
 BFS的本质其实还是贪心算法。实现的过程中，需要借助queue。
@@ -86,7 +86,7 @@ BFS的本质其实还是贪心算法。实现的过程中，需要借助queue。
 
 3.遍历queue
 
-## Dijkstra
+### dijkstra
 BFS能够解决无权最短路径问题，但是如果路径加权了，BFS就没法解决了，这时候就需要使用Dijkstra来解决这个问题。
 
 Dijkstra的答题思路跟BFS差不多，举一反三。
