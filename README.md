@@ -1,4 +1,4 @@
-[TOC]
+[[TOC]]
 # Go-DataStructure
 ## English
 On the way of learning Golang.
