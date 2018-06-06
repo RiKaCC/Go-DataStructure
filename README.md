@@ -2,8 +2,8 @@
 - [queue](#queue)
 - [stack](#stack)
 - [graph](#graph)
-    - [BFS](#BFS)
-    - [Dijkstra](#Dijkstra)
+    - [bfs](#bfs)
+    - [dijkstra](#dijkstra)
 
 On the way of learning Golang.
 
@@ -70,8 +70,53 @@ if s.Empty() {
 ```
 
 ## graph
+before make a graph, we need make node, edge.
 
-### BFS
+the `node` datastructure like this:
+
+```go
+type node struct {
+	id string
+}
+```
+the `edge` datastructure like this:
+
+it's easy to know each param means
+```go
+type Edge struct {
+	src    Node
+	dst    Node
+	weight int
+}
+```
+the `graph` datastructure like this:
+```go
+type Graph struct {
+	sync.RWMutex
+	edge    map[string]map[string]int
+	nodeMap map[string]Node // record all the node in a graph
+}
+```
+if node `A` to node `B`, the distance is 5,we can describe like this:
+```go
+Graph.dege[A][B] = 5
+Graph.nodeMap[A] = nodeA
+Graph.nodeMap[B] = nodeB
+```
+
+how we create a graph?
+```go
+g := NewGraph()
+g.AddEdge("A", "B", 3) // A->B 3
+g.AddEdge("A", "C", 2) // A->C 2
+g.AddEdge("B", "E", 6) // B->E 6
+g.AddEdge("B", "D", 2) // B->D 2
+g.AddEdge("D", "E", 3) // D->E 3
+g.AddEdge("C", "F", 1) // C-F 1
+g.AddEdge("E", "F", 4) // E->F 4
+```
+
+### bfs
 BFS(广度优先搜索)，是一种很常见的搜索。适用于无权最短路径的问题。
 
 BFS的本质其实还是贪心算法。实现的过程中，需要借助queue。
@@ -86,7 +131,7 @@ BFS的本质其实还是贪心算法。实现的过程中，需要借助queue。
 
 3.遍历queue
 
-### Dijkstra
+### dijkstra
 BFS能够解决无权最短路径问题，但是如果路径加权了，BFS就没法解决了，这时候就需要使用Dijkstra来解决这个问题。
 
 Dijkstra的答题思路跟BFS差不多，举一反三。
