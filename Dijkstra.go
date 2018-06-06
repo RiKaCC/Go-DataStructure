@@ -118,9 +118,6 @@ func (g *Graph) Dijkstra(src string, dst string) (shortDis float64) {
 			}
 
 			if g.edge[e][nodeID]+distance[e] < distance[nodeID] && g.edge[e][nodeID] != 0 {
-				if nodeID == "E" {
-					fmt.Println(e, nodeID, g.edge[e][nodeID])
-				}
 				distance[nodeID] = g.edge[e][nodeID] + distance[e]
 				q.Push(nodeID)
 			}
