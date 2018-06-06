@@ -309,6 +309,17 @@ Prim算法思想其实比较简洁，首先需要去理解什么是最小生成�
 
 5.执行4步骤，直到unknown中没有节点，这样生成的最小生成树就是known
 
+**Implement**
+1.at first, wo should make the graph like a unknown set
+
+2.difine a new set named known to record the node which visited
+
+3.put the src node into knowd set
+
+4.find a node from unknown which not in known , also has the shortest distance from the nodes in knowd
+
+5.repeate step 4
+
 完整代码如下：
 https://github.com/RiKaCC/Go-DataStructure/blob/master/Prim.go
 
@@ -442,9 +453,6 @@ func (g *Graph) Prim(src string) {
 				}
 			}
 		}
-
-		//tempEdgeMap[knowNode[key]][temp] = 0
-		//tempEdgeMap[temp][knowNode[key]] = 0
 
 		n1 := NewNode(temp)
 		n2 := NewNode(knowNode[key])
