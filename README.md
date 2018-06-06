@@ -299,6 +299,7 @@ Prim算法思想其实比较简洁，首先需要去理解什么是最小生成�
 简单一点理解就是：从一个图中选出节点，添加到一个新树上的过程
 
 **实现：**
+
 1.将要处理的无向图看做未访问过的集合unknown
 
 2.定义一个新的集合来记录已经访问的节点known
@@ -310,6 +311,7 @@ Prim算法思想其实比较简洁，首先需要去理解什么是最小生成�
 5.执行4步骤，直到unknown中没有节点，这样生成的最小生成树就是known
 
 **Implement**
+
 1.at first, wo should make the graph like a unknown set
 
 2.difine a new set named known to record the node which visited
