@@ -4,6 +4,7 @@
 - [graph](#graph)
     - [bfs](#bfs)
     - [dijkstra](#dijkstra)
+    - [prim](#prim)
 
 On the way of learning Golang.
 
@@ -151,3 +152,207 @@ for v := range graph {
 }
 ```
 
+完整代码：
+```golang
+func (g *Graph) Dijkstra(src string, dst string) (shortDis float64) {
+	// infinity
+	infinity := math.Inf(1)
+
+	// init a short distance map to record the shortest distance from src
+	distance := make(map[string]float64)
+	for nodeID := range g.nodeMap {
+		if nodeID == src {
+			distance[nodeID] = 0
+		} else {
+			distance[nodeID] = infinity
+		}
+	}
+
+	q := NewQueue()
+	q.Push(src)
+
+	for !q.Empty() {
+		v := q.Pop()
+		e, ok := v.(string)
+		if !ok {
+			return 0
+		}
+
+		for nodeID := range g.nodeMap {
+			if nodeID == e {
+				continue
+			}
+
+			if g.edge[e][nodeID]+distance[e] < distance[nodeID] && g.edge[e][nodeID] != 0 {
+				distance[nodeID] = g.edge[e][nodeID] + distance[e]
+				q.Push(nodeID)
+			}
+		}
+	}
+
+	for node := range g.nodeMap {
+		temp := fmt.Sprintf("from A -> %s =  %d", node, int(distance[node]))
+		fmt.Println(temp)
+	}
+	return distance[dst]
+}
+
+```
+
+### prim
+Prim算法思想其实比较简洁，首先需要去理解什么是最小生成树？下面是来自维基百科的解释：
+> 最小生成树是一副连通加权无向图中一棵权值最小的生成树。
+在一给定的无向图 G = (V, E) 中，(u, v) 代表连接顶点 u 与顶点 v 的边（即 {\displaystyle (u,v)\in E} (u,v)\in E），而 w(u, v) 代表此边的权重，若存在 T 为 E 的子集（即 {\displaystyle T\subseteq E} T\subseteq E）且 (V, T) 为树，使得
+{\displaystyle w(T)=\sum _{(u,v)\in T}w(u,v)} w(T)=\sum _{(u,v)\in T}w(u,v)
+的 w(T) 最小，则此 T 为 G 的最小生成树。
+最小生成树其实是最小权重生成树的简称.
+
+简单一点理解就是：在一个`联通的`,`加权的`，`无向图`中，找到一个能联通每一个节点，切权值总和最小的一棵树。
+
+**实现：**
+
+1.定义一个节点访问map, `knowNode`,来记录已经访问过的节点。
+
+2.将开始节点放入knowNode中
+
+3.遍历图, 找到与knowNode中所有节点权值最小的节点，并将该节点放入knowNode中
+
+4.循环第三步
+
+完整代码如下：
+https://github.com/RiKaCC/Go-DataStructure/blob/master/Prim.go
+
+```golang
+package main
+
+import (
+	"fmt"
+	//"github.com/davecgh/go-spew/spew"
+	"math"
+	"sync"
+)
+
+type node struct {
+	id string
+}
+
+type Edge struct {
+	src    Node
+	dst    Node
+	weight float64
+}
+
+type Graph struct {
+	sync.RWMutex
+	edge    map[string]map[string]float64
+	nodeMap map[string]Node // record all the node in a graph
+}
+
+type Node interface {
+	NodeID() string
+}
+
+func NewNode(id string) Node {
+	return &node{id: id}
+}
+
+func (n *node) NodeID() string {
+	return n.id
+}
+
+func NewEdge(src Node, dst Node, w float64) *Edge {
+	return &Edge{src: src, dst: dst, weight: w}
+}
+
+func NewGraph() *Graph {
+	return &Graph{
+		edge:    make(map[string]map[string]float64),
+		nodeMap: make(map[string]Node),
+	}
+}
+
+func (g *Graph) AddEdge(nodeID1 string, nodeID2 string, w float64) {
+	g.Lock()
+	defer g.Unlock()
+
+	if nodeID1 == nodeID2 {
+		panic("can't add same vertex in one edge")
+		return
+	}
+
+	if w == 0 {
+		panic("weight can't use 0")
+		return
+	}
+
+	// record each vertex
+	g.nodeMap[nodeID1] = NewNode(nodeID1)
+	g.nodeMap[nodeID2] = NewNode(nodeID2)
+
+	if _, ok := g.edge[nodeID1]; ok {
+		g.edge[nodeID1][nodeID2] = w
+	} else {
+		tempMap := make(map[string]float64)
+		tempMap[nodeID2] = w
+		g.edge[nodeID1] = tempMap
+	}
+}
+
+func main() {
+	g := NewGraph()
+	g.AddEdge("A", "B", 3)
+	g.AddEdge("A", "C", 2)
+	g.AddEdge("B", "E", 5)
+	g.AddEdge("B", "D", 2)
+	g.AddEdge("D", "E", -2)
+	g.AddEdge("C", "F", 1)
+	g.AddEdge("E", "F", 3)
+
+	fmt.Println(g)
+	shortDis := g.Dijkstra("A", "E")
+	fmt.Println("A->E shortest distance is:", shortDis)
+}
+
+func (g *Graph) Dijkstra(src string, dst string) (shortDis float64) {
+	// infinity
+	infinity := math.Inf(1)
+
+	// init a short distance map to record the shortest distance from src
+	distance := make(map[string]float64)
+	for nodeID := range g.nodeMap {
+		if nodeID == src {
+			distance[nodeID] = 0
+		} else {
+			distance[nodeID] = infinity
+		}
+	}
+
+	q := NewQueue()
+	q.Push(src)
+
+	for !q.Empty() {
+		v := q.Pop()
+		e, ok := v.(string)
+		if !ok {
+			return 0
+		}
+
+		for nodeID := range g.nodeMap {
+			if nodeID == e {
+				continue
+			}
+
+			if g.edge[e][nodeID]+distance[e] < distance[nodeID] && g.edge[e][nodeID] != 0 {
+				distance[nodeID] = g.edge[e][nodeID] + distance[e]
+				q.Push(nodeID)
+			}
+		}
+	}
+
+	for node := range g.nodeMap {
+		temp := fmt.Sprintf("from A -> %s =  %d", node, int(distance[node]))
+		fmt.Println(temp)
+	}
+	return distance[dst]
+}
+```
