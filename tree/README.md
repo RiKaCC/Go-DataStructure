@@ -33,3 +33,28 @@ func bTreeBFS(root *TreeNode) (ret []int) {
 	return ret
 }
 ```
+
+### 先序遍历
+```
+func tree2str(t *TreeNode) []int {
+	st := []*TreeNode{}
+	st = append(st, t)
+	nums := []int{}
+
+	for len(st) > 0 {
+		len := len(st)
+		cur := st[len-1]
+		nums = append(nums, cur.Val)
+		st = st[:len-1]
+		if cur.Right != nil {
+			st = append(st, cur.Right)
+		}
+
+		if cur.Left != nil {
+			st = append(st, cur.Left)
+		}
+	}
+
+	return nums
+}
+```
