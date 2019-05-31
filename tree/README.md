@@ -58,3 +58,31 @@ func tree2str(t *TreeNode) []int {
 	return nums
 }
 ```
+
+### 中序遍历
+
+```
+因为第一个结点不是root,所以需要在循环里进行压栈。
+若当前结点不为空，将当前结点压栈，当前结点赋值为当前结点的左子结点，一直循环这一步。
+若当前结点为空，则出栈，并置当前结点为出栈结点的右子树。
+
+func findTarget(root *TreeNode, k int) []int {
+	st := []*TreeNode{}
+	nums := []int{}
+
+	for len(st) > 0 || root != nil {
+		len := len(st)
+		if root != nil {
+			st = append(st, root)
+			root = root.Left
+		} else {
+			cur := st[len-1]
+			nums = append(nums, cur.Val)
+			st = st[:len-1]
+			root = cur.Right
+		}
+	}
+
+	return nums
+}
+```
