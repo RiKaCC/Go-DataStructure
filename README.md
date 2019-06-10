@@ -5,6 +5,7 @@
     - [bfs](#bfs)
     - [dijkstra](#dijkstra)
     - [prim](#prim)
+- [BTree](https://github.com/RiKaCC/Go-DataStructure/tree/master/tree)
 
 On the way of learning Golang.
 
