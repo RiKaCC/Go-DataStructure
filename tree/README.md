@@ -43,8 +43,10 @@ func tree2str(t *TreeNode) []int {
 
 	for len(st) > 0 {
 		len := len(st)
+		// 使用数组模拟栈，把最后一个元素（后入先出）取出来
 		cur := st[len-1]
 		nums = append(nums, cur.Val)
+		// st = s[:len-1]模拟了栈的pop操作
 		st = st[:len-1]
 		if cur.Right != nil {
 			st = append(st, cur.Right)
