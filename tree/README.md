@@ -87,8 +87,10 @@ func findTarget(root *TreeNode, k int) []int {
 
 	return nums
 }
+```
 
-// 递归的做法
+### 递归
+```
 func traverse(rooot *TreeNode) {
 	// 前序
 	traverse(root.Left)
